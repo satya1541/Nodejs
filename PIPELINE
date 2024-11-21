@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                git 'https://github.com/satya1541/Nodejs.git'
+            }
+        }
+        stage('script and dependency') {
+            steps {
+                echo 'do it manually'
+            }
+        }
+        stage('confirmation') {
+            steps {
+                script {
+                    def userInput = input(
+                        id: 'userInput', 
+                        message: 'Did you do it manually or not?', 
+                        parameters: [
+                            choice(name: 'Confirmation', choices: ['yes', 'no'], description: 'Select yes or no')
+                        ]
+                    )
+                    echo "User's response to manual check: ${userInput}"
+                }
+            }
+        }
+        stage('Docker Permission') {
+            steps {
+                script {
+                    def dockerPermission = input(
+                        id: 'dockerPermission', 
+                        message: 'Did you give permission for Docker?', 
+                        parameters: [
+                            choice(name: 'Docker Permission', choices: ['yes', 'no'], description: 'Select yes or no')
+                        ]
+                    )
+                    echo "User's response to Docker permission: ${dockerPermission}"
+                }
+            }
+        }
+        stage('Docker IMAGE creation') {
+            steps {
+                sh 'docker build -t myapp:1.0 .'
+            }
+        }
+        stage('Docker compose') {
+            steps {
+                sh 'docker-compose up --build -d'
+            }
+        }
+        stage('Nginx Installation') {
+            steps {
+                script {
+                    def nginxInstall = input(
+                        id: 'nginxInstall', 
+                        message: 'Did you install Nginx and Configure for Reverse proxy?', 
+                        parameters: [
+                            choice(name: 'Nginx Installation', choices: ['yes', 'no'], description: 'Select yes or no')
+                        ]
+                    )
+                    echo "User's response to Nginx installation: ${nginxInstall}"
+                }
+            }
+        }
+    }
+}
