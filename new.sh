@@ -1,3 +1,15 @@
+#!/bin/bash
+
+# Update the system and install Node.js setup script
+echo "Adding NodeSource repository for Node.js 18.x..."
+curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sleep 10  # Wait for 10 seconds
+
+# Install Node.js
+echo "Installing Node.js..."
+sudo apt install -y nodejs
+sleep 10  # Wait for 10 seconds
+
 # Verify Node.js installation
 echo "Checking Node.js version..."
 node --version
